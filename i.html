@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar Tarjeta en Google</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; flex-direction: column; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+        #payment-request-button { margin-top: 20px; min-height: 40px; }
+        .status { margin-top: 15px; font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Vincular Tarjeta</h2>
+        <p>Haz clic abajo para guardar tu tarjeta en Google Pay de forma segura (Cargo: $0.00).</p>
+        
+        <div id="payment-request-button"></div>
+        
+        <div id="status-msg" class="status">Cargando Google Pay...</div>
+    </div>
+
+    <script>
+        // 1. Configuración Inicial (Usa tu llave pública de Stripe)
+        const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Llave de prueba estándar
+
+        const paymentRequest = stripe.paymentRequest({
+            country: 'US',
+            currency: 'usd',
+            total: {
+                label: 'Validación de Tarjeta',
+                amount: 0, // Cero centavos = Sin cobro
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+        });
+
+        const elements = stripe.elements();
+        const prButton = elements.create('paymentRequestButton', {
+            paymentRequest,
+            style: {
+                paymentRequestButton: {
+                    type: 'book', // Puede ser 'default', 'donate', 'buy'
+                    theme: 'dark',
+                    height: '44px',
+                },
+            },
+        });
+
+        // 2. Verificar si el navegador tiene Google Pay habilitado
+        paymentRequest.canMakePayment().then((result) => {
+            if (result) {
+                prButton.mount('#payment-request-button');
+                document.getElementById('status-msg').innerText = "Listo para vincular.";
+            } else {
+                document.getElementById('payment-request-button').style.display = 'none';
+                document.getElementById('status-msg').innerText = "Google Pay no es compatible con este navegador o no tienes tarjetas guardadas.";
+            }
+        });
+
+        // 3. Acción al presionar el botón
+        paymentRequest.on('paymentmethod', async (ev) => {
+            document.getElementById('status-msg').innerText = "Verificando con el banco...";
+
+            // NOTA: En un sitio real, aquí llamarías a tu servidor para crear un 'SetupIntent'
+            // Por ahora, simulamos que el proceso fue exitoso:
+            
+            setTimeout(() => {
+                console.log("Tarjeta vinculada correctamente. ID del método:", ev.paymentMethod.id);
+                
+                // Confirmamos a Google que todo está bien para que cierre el modal
+                ev.complete('success');
+                
+                document.getElementById('status-msg').innerHTML = "<b>¡Éxito!</b> Tu tarjeta se ha guardado en tu cuenta de Google.";
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
