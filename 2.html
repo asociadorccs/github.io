@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardar Tarjeta - Simplificado</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8f9fa; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); width: 320px; }
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 14px; color: #3c4043; }
+        input { width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #1a73e8; ring: 2px solid #e8f0fe; }
+        button { width: 100%; padding: 12px; background-color: #1a73e8; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background-color: #1557b0; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <form action="/success" method="post" id="card-form">
+        <div class="input-group">
+            <label for="cc-number">Número de tarjeta</label>
+            <input type="text" id="cc-number" name="cc-number" 
+                   autocomplete="cc-number" 
+                   inputmode="numeric" 
+                   placeholder="xxxx xxxx xxxx xxxx" 
+                   required>
+        </div>
+
+        <div class="input-group">
+            <label for="cc-exp">Fecha de expiración</label>
+            <input type="text" id="cc-exp" name="cc-exp" 
+                   autocomplete="cc-exp" 
+                   placeholder="MM/AA" 
+                   required>
+        </div>
+
+        <button type="submit">Vincular a Google</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('card-form').addEventListener('submit', function(e) {
+        // Evitamos que la página se recargue para la prueba
+        e.preventDefault();
+        
+        // Al "simular" el envío, Chrome detectará los campos autocomplete
+        // y debería mostrar el mensaje: "¿Quieres guardar esta tarjeta?"
+        alert("Enviando datos... Si estás en HTTPS, Chrome te preguntará ahora si deseas guardar la tarjeta.");
+    });
+</script>
+
+</body>
+</html>
+
