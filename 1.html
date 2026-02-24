@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario con Autofill de Google</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f0f2f5; }
+        .form-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-size: 14px; margin-bottom: 5px; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #1557b0; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h2>Método de Pago</h2>
+    <form action="#" method="post" id="payment-form">
+        
+        <div class="field">
+            <label>Nombre en la tarjeta</label>
+            <input type="text" id="name" name="ccname" autocomplete="cc-name" placeholder="Juan Pérez" required>
+        </div>
+
+        <div class="field">
+            <label>Número de Tarjeta</label>
+            <input type="text" id="cardnumber" name="add-card" autocomplete="cc-number" inputmode="numeric" placeholder="0000 0000 0000 0000" required>
+        </div>
+
+        <div class="field" style="display: flex; gap: 10px;">
+            <div style="flex: 2;">
+                <label>Expiración (MM/AA)</label>
+                <input type="text" id="exp" name="ccexp" autocomplete="cc-exp" placeholder="MM/AA" required>
+            </div>
+            <div style="flex: 1;">
+                <label>CVC</label>
+                <input type="text" id="cvc" name="cvc" autocomplete="cc-csc" placeholder="123" required>
+            </div>
+        </div>
+
+        <button type="submit">Guardar en mi cuenta</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Chrome detectará este envío y te preguntará si quieres guardar la tarjeta.');
+        // Aquí podrías redirigir a una página de éxito
+    });
+</script>
+
+</body>
+</html>
